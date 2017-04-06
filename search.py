@@ -83,8 +83,53 @@ def depthFirstSearch(problem):
   print "Is the start a goal?", problem.isGoalState(problem.getStartState())
   print "Start's successors:", problem.getSuccessors(problem.getStartState())
   """
-  "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+
+  #stack = recursive_dfs(problem.getStartState(), problem, [], [], [])
+  stack = recursive_dfs((1, 2), problem)
+  path = []
+  from game import Directions
+  for s in stack:
+    if s[1] == "North":
+      path.append(Directions.NORTH)
+    elif s[1] == "South":
+      path.append(Directions.SOUTH)
+    elif s[1] == "East":
+      path.append(Directions.EAST)
+    elif s[1] == "West":
+      path.append(Directions.WEST)
+  
+  return path
+
+  #util.raiseNotDefined()
+def recursive_dfs(node, problem, visit=[], stack=[], found = False):
+  print node[0]
+  if node[0] == (1,1):
+    found = True
+    return stack
+  if problem.isGoalState(node):
+    found = True
+    return stack
+  if type(node[0]) is int:
+    if node not in visit:
+      stack.append(node)
+      visit.append(node)
+      for child in problem.getSuccessors(node):
+        print "child of", node, "is", child[0]
+        if not found:
+          recursive_dfs(child, problem, visit, stack, found)
+  else:
+    if node[0] not in visit:
+      stack.append(node)
+      visit.append(node[0])
+      for child in problem.getSuccessors(node[0]):
+        print "child of", node[0], "is", child[0]
+        if not found:
+          recursive_dfs(child, problem, visit, stack, found)
+  while len(stack) > 0 and not found:
+    recursive_dfs(stack.pop(), problem, visit, stack, found)
+  return stack
+
+
 
 def breadthFirstSearch(problem):
   """
