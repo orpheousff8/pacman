@@ -90,7 +90,6 @@ def depthFirstSearch(problem):
 
 
   if problem.isGoalState(problem.getStartState()):
-    #print "Found at", problem.getStartState()
     curr = (problem.getStartState(), None)
   else:
     stack.push(start)
@@ -100,9 +99,8 @@ def depthFirstSearch(problem):
     if parent in visited:
       continue
     if problem.isGoalState(parent):
-      #print "Found at", parent
       curr = (parent, None)
-      break
+      break #solution found no need further search
     visited.append(parent)
     children = problem.getSuccessors(parent)
     for child in children:
@@ -147,7 +145,6 @@ def breadthFirstSearch(problem):
 
 
   if problem.isGoalState(problem.getStartState()):
-    #print "Found at", problem.getStartState()
     curr = (problem.getStartState(), None)
   else:
     queue.push(start)
@@ -157,9 +154,8 @@ def breadthFirstSearch(problem):
     if parent in visited:
       continue
     if problem.isGoalState(parent):
-      #print "Found at", parent
       curr = (parent, None)
-      break
+      break #solution found with minimum hop no need further search
     visited.append(parent)
     children = problem.getSuccessors(parent)
     for child in children:
@@ -169,7 +165,6 @@ def breadthFirstSearch(problem):
 
   action = util.Stack()
   while (curr[0] != None):
-    #print curr
     action.push(curr[1])
     if curr[0] == problem.getStartState():
       break
@@ -194,36 +189,32 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
   start = problem.getStartState()
-  prioQueue = util.PriorityQueue()
+  PrioQueue = util.PriorityQueue()
   visited = []
   parentMap = {}
 
-
   if problem.isGoalState(problem.getStartState()):
-    #print "Found at", problem.getStartState()
     curr = (problem.getStartState(), None)
   else:
-      prioQueue.push(start, 0)
+    PrioQueue.push(start, 0)
 
-  while not prioQueue.isEmpty():
-    parent = prioQueue.pop()
+  while not PrioQueue.isEmpty():
+    parent = PrioQueue.pop()
     if parent in visited:
       continue
     if problem.isGoalState(parent):
-      #print "Found at", parent
       curr = (parent, None)
-      #break
+      #no break as we want the minimum cost
     visited.append(parent)
     children = problem.getSuccessors(parent)
     for child in children:
-      #prioQueue.push(child[0], util.manhattanDistance(child[0], problem.getStartState()))
-      prioQueue.push(child[0], child[2])
+      #manhattanDistance is a aprroxed summ of distance.
+      PrioQueue.push(child[0], util.manhattanDistance(child[0], problem.getStartState()))
       if not parentMap.has_key(child[0]):
         parentMap[child[0]] = (parent, child[1])
 
   action = util.Stack()
   while (curr[0] != None):
-    #print curr
     action.push(curr[1])
     if curr[0] == problem.getStartState():
       break
