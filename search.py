@@ -194,7 +194,7 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
   start = problem.getStartState()
-  queue = util.Queue()
+  prioQueue = util.PriorityQueue()
   visited = []
   parentMap = {}
 
@@ -203,10 +203,10 @@ def uniformCostSearch(problem):
     #print "Found at", problem.getStartState()
     curr = (problem.getStartState(), None)
   else:
-    queue.push(start)
+      prioQueue.push(start, 0)
 
-  while not queue.isEmpty():
-    parent = queue.pop()
+  while not prioQueue.isEmpty():
+    parent = prioQueue.pop()
     if parent in visited:
       continue
     if problem.isGoalState(parent):
@@ -216,7 +216,7 @@ def uniformCostSearch(problem):
     visited.append(parent)
     children = problem.getSuccessors(parent)
     for child in children:
-      queue.push(child[0])
+      prioQueue.push(child[0], child[2])
       if not parentMap.has_key(child[0]):
         parentMap[child[0]] = (parent, child[1])
 
