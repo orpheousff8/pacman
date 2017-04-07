@@ -83,66 +83,166 @@ def depthFirstSearch(problem):
   print "Is the start a goal?", problem.isGoalState(problem.getStartState())
   print "Start's successors:", problem.getSuccessors(problem.getStartState())
   """
+  start = problem.getStartState()
+  stack = util.Stack()
+  visited = []
+  parentMap = {}
 
-  #stack = recursive_dfs(problem.getStartState(), problem, [], [], [])
-  stack = recursive_dfs((1, 2), problem)
-  path = []
+
+  if problem.isGoalState(problem.getStartState()):
+    #print "Found at", problem.getStartState()
+    curr = (problem.getStartState(), None)
+  else:
+    stack.push(start)
+
+  while not stack.isEmpty():
+    parent = stack.pop()
+    if parent in visited:
+      continue
+    if problem.isGoalState(parent):
+      #print "Found at", parent
+      curr = (parent, None)
+      break
+    visited.append(parent)
+    children = problem.getSuccessors(parent)
+    for child in children:
+      stack.push(child[0])
+      if not parentMap.has_key(child[0]):
+        parentMap[child[0]] = (parent, child[1])
+
+  action = util.Stack()
+  while (curr[0] != None):
+    #print curr
+    action.push(curr[1])
+    if curr[0] == problem.getStartState():
+      break
+    curr = parentMap[curr[0]]
+
+  instruction = []
   from game import Directions
-  for s in stack:
-    if s[1] == "North":
-      path.append(Directions.NORTH)
-    elif s[1] == "South":
-      path.append(Directions.SOUTH)
-    elif s[1] == "East":
-      path.append(Directions.EAST)
-    elif s[1] == "West":
-      path.append(Directions.WEST)
+  while not action.isEmpty():
+    a = action.pop()
+    if a == "North":
+      instruction.append(Directions.NORTH)
+    elif a == "South":
+      instruction.append(Directions.SOUTH)
+    elif a == "East":
+      instruction.append(Directions.EAST)
+    elif a == "West":
+      instruction.append(Directions.WEST)
   
-  return path
+  return instruction
 
   #util.raiseNotDefined()
-def recursive_dfs(node, problem, visit=[], stack=[], found = False):
-  print node[0]
-  if node[0] == (1,1):
-    found = True
-    return stack
-  if problem.isGoalState(node):
-    found = True
-    return stack
-  if type(node[0]) is int:
-    if node not in visit:
-      stack.append(node)
-      visit.append(node)
-      for child in problem.getSuccessors(node):
-        print "child of", node, "is", child[0]
-        if not found:
-          recursive_dfs(child, problem, visit, stack, found)
-  else:
-    if node[0] not in visit:
-      stack.append(node)
-      visit.append(node[0])
-      for child in problem.getSuccessors(node[0]):
-        print "child of", node[0], "is", child[0]
-        if not found:
-          recursive_dfs(child, problem, visit, stack, found)
-  while len(stack) > 0 and not found:
-    recursive_dfs(stack.pop(), problem, visit, stack, found)
-  return stack
-
-
 
 def breadthFirstSearch(problem):
   """
   Search the shallowest nodes in the search tree first.
   [2nd Edition: p 73, 3rd Edition: p 82]
   """
-  "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+  start = problem.getStartState()
+  queue = util.Queue()
+  visited = []
+  parentMap = {}
+
+
+  if problem.isGoalState(problem.getStartState()):
+    #print "Found at", problem.getStartState()
+    curr = (problem.getStartState(), None)
+  else:
+    queue.push(start)
+
+  while not queue.isEmpty():
+    parent = queue.pop()
+    if parent in visited:
+      continue
+    if problem.isGoalState(parent):
+      #print "Found at", parent
+      curr = (parent, None)
+      break
+    visited.append(parent)
+    children = problem.getSuccessors(parent)
+    for child in children:
+      queue.push(child[0])
+      if not parentMap.has_key(child[0]):
+        parentMap[child[0]] = (parent, child[1])
+
+  action = util.Stack()
+  while (curr[0] != None):
+    #print curr
+    action.push(curr[1])
+    if curr[0] == problem.getStartState():
+      break
+    curr = parentMap[curr[0]]
+
+  instruction = []
+  from game import Directions
+  while not action.isEmpty():
+    a = action.pop()
+    if a == "North":
+      instruction.append(Directions.NORTH)
+    elif a == "South":
+      instruction.append(Directions.SOUTH)
+    elif a == "East":
+      instruction.append(Directions.EAST)
+    elif a == "West":
+      instruction.append(Directions.WEST)
+
+  return instruction
+  #util.raiseNotDefined()
       
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
-  "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+  start = problem.getStartState()
+  queue = util.Queue()
+  visited = []
+  parentMap = {}
+
+
+  if problem.isGoalState(problem.getStartState()):
+    #print "Found at", problem.getStartState()
+    curr = (problem.getStartState(), None)
+  else:
+    queue.push(start)
+
+  while not queue.isEmpty():
+    parent = queue.pop()
+    if parent in visited:
+      continue
+    if problem.isGoalState(parent):
+      #print "Found at", parent
+      curr = (parent, None)
+      break
+    visited.append(parent)
+    children = problem.getSuccessors(parent)
+    for child in children:
+      queue.push(child[0])
+      if not parentMap.has_key(child[0]):
+        parentMap[child[0]] = (parent, child[1])
+
+  action = util.Stack()
+  while (curr[0] != None):
+    #print curr
+    action.push(curr[1])
+    if curr[0] == problem.getStartState():
+      break
+    curr = parentMap[curr[0]]
+
+  instruction = []
+  from game import Directions
+  while not action.isEmpty():
+    a = action.pop()
+    if a == "North":
+      instruction.append(Directions.NORTH)
+    elif a == "South":
+      instruction.append(Directions.SOUTH)
+    elif a == "East":
+      instruction.append(Directions.EAST)
+    elif a == "West":
+      instruction.append(Directions.WEST)
+
+  return instruction
+  #util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
   """
