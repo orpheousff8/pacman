@@ -209,7 +209,7 @@ def uniformCostSearch(problem):
     children = problem.getSuccessors(parent)
     for child in children:
       #manhattanDistance is a aprroxed summ of distance.
-      PrioQueue.push(child[0], util.manhattanDistance(child[0], problem.getStartState()))
+      PrioQueue.push(child[0], util.manhattanDistance(problem.getStartState(), child[0]))
       if not parentMap.has_key(child[0]):
         parentMap[child[0]] = (parent, child[1])
 
@@ -250,9 +250,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
   visited = []
   parentMap = {}
 
-
   if problem.isGoalState(problem.getStartState()):
-    #print "Found at", problem.getStartState()
     curr = (problem.getStartState(), None)
   else:
       prioQueue.push(start, 0)
@@ -262,19 +260,18 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     if parent in visited:
       continue
     if problem.isGoalState(parent):
-      #print "Found at", parent
       curr = (parent, None)
-      #break
+      #no break
     visited.append(parent)
     children = problem.getSuccessors(parent)
     for child in children:
-      prioQueue.push(child[0], heuristic(child[0], problem))
+      prioQueue.push(child[0], util.manhattanDistance(problem.getStartState(), child[0])
+                     + util.manhattanDistance(child[0], (1, 1)))
       if not parentMap.has_key(child[0]):
         parentMap[child[0]] = (parent, child[1])
 
   action = util.Stack()
   while (curr[0] != None):
-    #print curr
     action.push(curr[1])
     if curr[0] == problem.getStartState():
       break

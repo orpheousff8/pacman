@@ -275,18 +275,29 @@ class CornersProblem(search.SearchProblem):
       if not startingGameState.hasFood(*corner):
         print 'Warning: no food in corner ' + str(corner)
     self._expanded = 0 # Number of search nodes expanded
-    
-    "*** YOUR CODE HERE ***"
+
+    # For display purposes
+    self._visited, self._visitedlist, self._expanded = {}, [], 0
     
   def getStartState(self):
     "Returns the start state (in your state space, not the full Pacman state space)"
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    return self.startingPosition
+    #util.raiseNotDefined()
     
   def isGoalState(self, state):
     "Returns whether this search state is a goal state of the problem"
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    isGoal = state == game.
+
+    # For display purposes only
+    if isGoal:
+      self._visitedlist.append(state)
+      import __main__
+      if '_display' in dir(__main__):
+        if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
+          __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+
+    return isGoal
+    #util.raiseNotDefined()
        
   def getSuccessors(self, state):
     """
@@ -308,8 +319,20 @@ class CornersProblem(search.SearchProblem):
       #   dx, dy = Actions.directionToVector(action)
       #   nextx, nexty = int(x + dx), int(y + dy)
       #   hitsWall = self.walls[nextx][nexty]
-      
-      "*** YOUR CODE HERE ***"
+
+      x, y = state
+      dx, dy = Actions.directionToVector(action)
+      nextx, nexty = int(x + dx), int(y + dy)
+      if not self.walls[nextx][nexty]:
+        nextState = (nextx, nexty)
+        cost = self.costFn(nextState)
+        successors.append((nextState, action, cost))
+
+      # Bookkeeping for display purposes
+      self._expanded += 1
+      if state not in self._visited:
+        self._visited[state] = True
+        self._visitedlist.append(state)
       
     self._expanded += 1
     return successors
