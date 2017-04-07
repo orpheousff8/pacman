@@ -212,10 +212,11 @@ def uniformCostSearch(problem):
     if problem.isGoalState(parent):
       #print "Found at", parent
       curr = (parent, None)
-      break
+      #break
     visited.append(parent)
     children = problem.getSuccessors(parent)
     for child in children:
+      #prioQueue.push(child[0], util.manhattanDistance(child[0], problem.getStartState()))
       prioQueue.push(child[0], child[2])
       if not parentMap.has_key(child[0]):
         parentMap[child[0]] = (parent, child[1])
@@ -253,8 +254,56 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
   "Search the node that has the lowest combined cost and heuristic first."
-  "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+  start = problem.getStartState()
+  prioQueue = util.PriorityQueue()
+  visited = []
+  parentMap = {}
+
+
+  if problem.isGoalState(problem.getStartState()):
+    #print "Found at", problem.getStartState()
+    curr = (problem.getStartState(), None)
+  else:
+      prioQueue.push(start, 0)
+
+  while not prioQueue.isEmpty():
+    parent = prioQueue.pop()
+    if parent in visited:
+      continue
+    if problem.isGoalState(parent):
+      #print "Found at", parent
+      curr = (parent, None)
+      #break
+    visited.append(parent)
+    children = problem.getSuccessors(parent)
+    for child in children:
+      prioQueue.push(child[0], heuristic(child[0], problem))
+      if not parentMap.has_key(child[0]):
+        parentMap[child[0]] = (parent, child[1])
+
+  action = util.Stack()
+  while (curr[0] != None):
+    #print curr
+    action.push(curr[1])
+    if curr[0] == problem.getStartState():
+      break
+    curr = parentMap[curr[0]]
+
+  instruction = []
+  from game import Directions
+  while not action.isEmpty():
+    a = action.pop()
+    if a == "North":
+      instruction.append(Directions.NORTH)
+    elif a == "South":
+      instruction.append(Directions.SOUTH)
+    elif a == "East":
+      instruction.append(Directions.EAST)
+    elif a == "West":
+      instruction.append(Directions.WEST)
+
+  return instruction
+  #util.raiseNotDefined()
     
   
 # Abbreviations
